@@ -1,0 +1,71 @@
+# 东方财富网页版登录API
+# 前言
+仅供个人学习和个人自动交易使用，禁止用于其他用途。
+其主要的重点在于东财的登录过程，可以使用任何的语言实现。剩余的其他API，仅满足本人的交易需求。
+# 要求
+1.python环境，安装[ddddocr](https://pypi.org/project/ddddocr/)库，用于验证码识别。  
+2.安装东方财富安全控件（网页版登录的时候，必须要安装的。）  
+3.在根目录下创建config.yaml文件  
+```
+user:  
+  account: "资金账号"
+  password: "交易密码"
+```
+
+## 登录
+调用接口前必须先调用登录接口，由于验证码识别有可能会失败，这里内部会重试5次，5次仍然失败则程序异常退出。  
+里面的 validateKey 会过期的，暂时没有开发自动刷新的功能。  
+因为本人的交易时间较短，每次进行交易时都重新登录，所以不考虑该问题。  
+过期时间我设置成最短时间15分钟，写死的  
+```go
+	var c = client.NewEastMoneyClient()
+	if err := c.Login(config.GetConfg().User.Account, config.GetConfg().User.Password); err != nil {
+		panic(err)
+	}
+```
+
+## 提交委托订单
+切记请勿在开盘时间测试！！！
+```go
+    // TradeTypeBuy 进行买入
+    // TradeTypeSale 进行卖出
+	c.SubmitTrade(model.TradeOrderForm{
+			Code: "xxxxxxx",
+			Name: "xxxxxxx",
+			Amount:    100,
+			Price:     decimal.NewFromFloat(2.856),
+			TradeType: model.TradeTypeBuy,
+		})
+```
+
+## 撤单
+这个撤单支持批量操作，但是不建议这么操作。他的返回结果是没有状态码，只有一串字符串连在一起，形如（委托编号: 执行结果）。  
+多条数据通过三个空格分割，批量操作不好判断，撤单是否执行成功。  
+通常撤单的对象通过查询未完全成交交易订单获取 `GetRevokeList()`。
+```go
+	c.RevokeOrders([]*model.UnClosingOrder{{
+			Time:    "xxxxxx",
+			OrderId: "xxxxxx",
+		}
+```
+
+## 查询当日委托成交
+东财的翻页逻辑做的实在太恶心了，需要根据某一页的数据来计算出上一页或下一页的页码，不能指定跳转某一页，所以他的查询接口，我就干脆直接将每页数据设置为100条了，这个交易频率足够我使用了。
+```go
+	c.GetDealData()
+```
+
+## 查询K线数据
+默认情况下只查询最近一个月的日K线数据
+```go
+	data, _ := api.GetKline(model.QueryKlineParam{
+		Code: "xxxxx",
+	})s
+```
+
+## 查询最新行情数据
+其中：挂单的数据只关注买1和卖1的委托价格和委托量
+```go
+	api.GetQuote("xxxxx")
+```
+

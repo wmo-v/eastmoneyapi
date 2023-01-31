@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	math_rand "math/rand"
@@ -178,7 +179,20 @@ func (e *eastMoneyClient) SubmitTrade(order model.TradeOrderForm) error {
 	if result.Status != 0 {
 		return errors.New(result.Message)
 	}
-	log.Println("委托成功。", "代码: ", order.Code, ", 名称：", order.Name)
+
+	msg := fmt.Sprintf(
+		"\n订单委托成功:\n"+
+			"\t委托时间: %s\n"+
+			"\t代码: %s\n"+
+			"\t名称: %s\n"+
+			"\t委托数量: %d\n"+
+			"\t委托价格: %s\n",
+		time.Now().Format("2006-01-02 15:04:05"),
+		order.Code,
+		order.Name,
+		order.Amount,
+		order.Price.String())
+	log.Println(msg)
 	return nil
 }
 
@@ -236,7 +250,7 @@ func (e *eastMoneyClient) RevokeOrders(list []*model.UnClosingOrder) (string, er
 
 	var revokes = ""
 	for i := range list {
-		revokes += list[i].Time + "_" + list[i].OrderId + ","
+		revokes += list[i].Date + "_" + list[i].OrderId + ","
 	}
 	revokes = revokes[:len(revokes)-1]
 	var form = make(url.Values)

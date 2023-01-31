@@ -56,13 +56,15 @@ type DealOrder struct {
 
 // 未成交的订单
 type UnClosingOrder struct {
-	Time          string `json:"Wtrq"` // 委托日期
+	Date          string `json:"Wtrq"` // 委托日期
+	Time          string `json:"Wtsj"` // 委托时间
 	OrderId       string `json:"Wtbh"` // 委托编号
 	Code          string `json:"Zqdm"` // 证券代码
 	Name          string `json:"Zqmc"` // 证券名称
 	Type          string `json:"Mmsm"` // 委托方向
+	Status        string `json:"Wtzt"` // 委托状态
+	Price         string `json:"Wtjg"` // 委托价格
 	Amount        string `json:"Wtsl"` // 委托数量
-	Price         string `json:"Wtzt"` // 委托价格
 	ClosingPrice  string `json:"Cjjg"` // 成交价格
 	ClosingAmount string `json:"Cjsl"` // 成交数量
 }

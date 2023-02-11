@@ -22,10 +22,10 @@ func init() {
 		config.SetConfigPath(configPath)
 	}
 }
+
 func main() {
-	var c = client.NewEastMoneyClient()
-	if err := c.Login(config.GetConfg().User.Account, config.GetConfg().User.Password); err != nil {
-		panic(err)
-	}
-	// 根据自己的需求进行交易
+	// z := service.NewZ513050Svc()
+	// z.Start()
+	c := client.NewEastMoneyClient()
+	c.GetStockList()
 }

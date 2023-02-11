@@ -28,10 +28,6 @@ var conf *Config
 var once sync.Once
 
 func GetConfg() *Config {
-	if conf != nil {
-		return conf
-	}
-
 	once.Do(func() {
 		viper.SetConfigFile(defaultConfigFile)
 		if err := viper.ReadInConfig(); err != nil {

@@ -60,6 +60,9 @@ func GetPriceMagnification(code string) float64 {
 	}
 	return 100.0
 }
+func IsEFT(code string) bool {
+	return strings.HasPrefix(code, "5") || strings.HasPrefix(code, "1")
+}
 
 // 获取股票所在的板块
 func GetCodeMarket(code string) string {

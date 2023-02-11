@@ -4,12 +4,30 @@ import "github.com/shopspring/decimal"
 
 // 股票行情数据
 type Stockquote struct {
-	Code            string  `json:"f57"`
-	Name            string  `json:"f58"`
-	BuyPrice1       float64 `json:"f19"` // 买1价
-	BuyPrice1Count  int     `json:"f20"` // 买1挂单数
+	Code string `json:"f57"`
+	Name string `json:"f58"`
+
+	SalePrice5      float64 `json:"f31"` // 卖5
+	SalePrice5Count int     `json:"f32"`
+	SalePrice4      float64 `json:"f33"` // 卖4
+	SalePrice4Count int     `json:"f34"`
+	SalePrice3      float64 `json:"f35"` // 卖3
+	SalePrice3Count int     `json:"f36"`
+	SalePrice2      float64 `json:"f37"` // 卖2
+	SalePrice2Count int     `json:"f38"`
 	SalePrice1      float64 `json:"f39"` // 卖1价
-	SalePrice1Count int     `json:"f40"` // 卖1挂单数
+	SalePrice1Count int     `json:"f40"`
+
+	BuyPrice1      float64 `json:"f19"` // 买1价
+	BuyPrice1Count int     `json:"f20"`
+	BuyPrice2      float64 `json:"f17"` // 买2价
+	BuyPrice2Count int     `json:"f18"`
+	BuyPrice3      float64 `json:"f15"` // 买3价
+	BuyPrice3Count int     `json:"f16"`
+	BuyPrice4      float64 `json:"f13"` // 买4价
+	BuyPrice4Count int     `json:"f14"`
+	BuyPrice5      float64 `json:"f11"` // 买5价
+	BuyPrice5Count int     `json:"f12"`
 
 	NewestPrice float64 `json:"f43"` // 当前最新价
 	OpenPrice   float64 `json:"f46"` // 开盘价

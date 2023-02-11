@@ -1,27 +1,28 @@
 package model
 
 import (
-	"strconv"
-
 	"github.com/shopspring/decimal"
 )
 
 // 持仓情况
 type PositionDetail struct {
-	Code                 string `json:"Zqdm"`
-	Name                 string `json:"Zqmc"`
+	Code string `json:"Zqdm"`
+	Name string `json:"Zqmc"`
+	// 可用数量
 	AvailableQuantityStr string `json:"Kysl"`
-	TotalQuantityStr     string `json:"Zqsl"`
+	// 持仓数量
+	TotalQuantityStr string `json:"Zqsl"`
+	// 成本价（平均）
+	CostPriceStr string `json:"Cbjg"`
 }
 
-func (p *PositionDetail) GetAvailableQuantity() int {
-	res, _ := strconv.Atoi(p.AvailableQuantityStr)
-	return res
-}
-
-func (p *PositionDetail) GetTotalQuantity() int {
-	res, _ := strconv.Atoi(p.TotalQuantityStr)
-	return res
+// AccountDetail 账户详情
+type AccountDetail struct {
+	// 总资产
+	TotalAssetStr string `json:"Zzc"`
+	// 可用资金
+	AvailableFundStr string           `json:"Kyzj"`
+	Positions        []PositionDetail `json:"positions"`
 }
 
 // TradeType 交易类型
@@ -50,8 +51,8 @@ type DealOrder struct {
 	Code        string `json:"Zqdm"` // 证券代码
 	Name        string `json:"Zqmc"` // 证券名称
 	Type        string `json:"Mmlb"` // 委托方向
-	Amount      string `json:"Cjsl"` // 成交数量
-	Price       string `json:"Cjjg"` // 成交价格
+	AmountStr   string `json:"Cjsl"` // 成交数量
+	PriceStr    string `json:"Cjjg"` // 成交价格
 }
 
 // 未成交的订单

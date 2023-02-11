@@ -11,19 +11,10 @@ user:
   account: "资金账号"
   password: "交易密码"
 ```
-
-## 登录
-调用接口前必须先调用登录接口，由于验证码识别有可能会失败，这里内部会重试5次，5次仍然失败则程序异常退出。  
-里面的 validateKey 会过期的，暂时没有开发自动刷新的功能。  
-因为本人的交易时间较短，每次进行交易时都重新登录，所以不考虑该问题。  
-过期时间我设置成最短时间15分钟，写死的  
+## 新建东方财富客户端
 ```go
-	var c = client.NewEastMoneyClient()
-	if err := c.Login(config.GetConfg().User.Account, config.GetConfg().User.Password); err != nil {
-		panic(err)
-	}
+	client.NewEastMoneyClient()
 ```
-
 ## 提交委托订单
 切记请勿在开盘时间测试！！！
 ```go

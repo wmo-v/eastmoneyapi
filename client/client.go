@@ -13,6 +13,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io"
+	"log"
 	math_rand "math/rand"
 	"net/http"
 	"net/http/cookiejar"
@@ -26,7 +27,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"
-	log "github.com/sirupsen/logrus"
+	logrus "github.com/sirupsen/logrus"
 )
 
 var verifyCodeImgFile = "./verifyCode.jpg"
@@ -157,7 +158,7 @@ func (e *EastMoneyClient) getValidateKey() error {
 	// Load the HTML document
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 	target := doc.Find("#em_validatekey")
 	if len(target.Nodes) != 1 {

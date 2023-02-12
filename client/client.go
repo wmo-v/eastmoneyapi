@@ -174,7 +174,7 @@ func (e *EastMoneyClient) getValidateKey() error {
 }
 
 // SubmitTrade 提交订单交易
-func (e *EastMoneyClient) SubmitTrade(order model.TradeOrderForm) error {
+func (e *EastMoneyClient) SubmitTrade(order model.TradeOrderForm) (string, error) {
 	var formData = make(url.Values, 0)
 	formData.Add("stockCode", order.Code)
 	formData.Add("zqmc", order.Name)
@@ -195,7 +195,7 @@ func (e *EastMoneyClient) SubmitTrade(order model.TradeOrderForm) error {
 	)
 	resp, err := e.c.Do(req)
 	if err != nil {
-		return errors.New(err.Error())
+		return "", errors.New(err.Error())
 	}
 
 	defer resp.Body.Close()
@@ -203,22 +203,29 @@ func (e *EastMoneyClient) SubmitTrade(order model.TradeOrderForm) error {
 	var result = struct {
 		Status  int    `json:"status"`
 		Message string `json:"Message"`
+		Data    []struct {
+			OrderId string `json:"Wtbh"`
+		} `json:"Data"`
 	}{}
 	if err := decoder.Decode(&result); err != nil {
-		return errors.New(err.Error())
+		return "", errors.New(err.Error())
 	}
 	if result.Status != 0 {
-		return errors.New(result.Message)
+		return "", errors.New(result.Message)
 	}
-
+	if len(result.Data) != 1 {
+		return "", errors.New("未知情况发生，委托编号不是唯一")
+	}
 	msg := fmt.Sprintf(
 		"\n订单委托成功:\n"+
+			"\t委托编号: %s\n"+
 			"\t委托时间: %s\n"+
 			"\t代码: %s\n"+
 			"\t名称: %s\n"+
 			"\t委托数量: %d\n"+
 			"\t委托价格: %s\n"+
 			"\t委托方向: %s\n",
+		result.Data[0].OrderId,
 		time.Now().Format("2006-01-02 15:04:05"),
 		order.Code,
 		order.Name,
@@ -226,7 +233,7 @@ func (e *EastMoneyClient) SubmitTrade(order model.TradeOrderForm) error {
 		order.Price.String(),
 		order.TradeType)
 	log.Println(msg)
-	return nil
+	return result.Data[0].OrderId, nil
 }
 
 // GetDealData 获取当日成交信息

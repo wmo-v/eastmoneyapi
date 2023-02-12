@@ -236,44 +236,34 @@ func (e *EastMoneyClient) SubmitTrade(order model.TradeOrderForm) (string, error
 	return result.Data[0].OrderId, nil
 }
 
-// GetDealData 获取当日成交信息
-func (e *EastMoneyClient) GetDealData() ([]*model.DealOrder, error) {
-	var form = make(url.Values, 0)
-	form.Add("qqhs", "100")
-	req, _ := createRequestWithBaseHeader(
-		"POST",
-		baseUrl+"/Search/GetDealData?validatekey="+e.validateKey,
-		strings.NewReader(form.Encode()),
-	)
-	resp, err := e.c.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	var decoder = json.NewDecoder(resp.Body)
-	var result = struct {
-		Data    []*model.DealOrder `json:"Data"`
-		Status  int                `json:"Status"`
-		Message string             `json:"Message"`
-	}{}
-	if err := decoder.Decode(&result); err != nil {
-		return nil, err
-	}
-	return result.Data, nil
+// GetOrdersList 获取当日的所有订单信息
+func (e *EastMoneyClient) GetOrdersList() ([]*model.Order, error) {
+	return e.getOrders(baseUrl + "/Search/GetOrdersData?validatekey=" + e.validateKey)
 }
 
-// GetRevokeList 获取未完全成交的交易列表
-func (e *EastMoneyClient) GetRevokeList() ([]*model.UnClosingOrder, error) {
-	req, _ := createRequestWithBaseHeader("POST", baseUrl+"/Trade/GetRevokeList?validatekey="+e.validateKey, nil)
+// GetDealList 获取当日成交信息
+func (e *EastMoneyClient) GetDealList() ([]*model.Order, error) {
+	return e.getOrders(baseUrl + "/Search/GetDealData?validatekey=" + e.validateKey)
+}
+
+// GetRevokeList 获取可撤单的订单信息
+func (e *EastMoneyClient) GetRevokeList() ([]*model.Order, error) {
+	return e.getOrders(baseUrl + "/Trade/GetRevokeList?validatekey=" + e.validateKey)
+}
+
+func (e *EastMoneyClient) getOrders(u string) ([]*model.Order, error) {
+	var form = make(url.Values, 0)
+	form.Add("qqhs", "100")
+	req, _ := createRequestWithBaseHeader("POST", u, strings.NewReader(form.Encode()))
 	resp, err := e.c.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 	var result = struct {
-		Data    []*model.UnClosingOrder `json:"Data"`
-		Status  int                     `json:"Status"`
-		Message string                  `json:"Message"`
+		Data    []*model.Order `json:"Data"`
+		Status  int            `json:"Status"`
+		Message string         `json:"Message"`
 	}{}
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return nil, err
@@ -283,7 +273,7 @@ func (e *EastMoneyClient) GetRevokeList() ([]*model.UnClosingOrder, error) {
 
 // RevokeOrders 撤单，支持批量撤单，但是不建议使用，返回一串的字符串，需要自行判断有没有撤单成功。
 // 格式为： 委托编号: 消息
-func (e *EastMoneyClient) RevokeOrders(list []*model.UnClosingOrder) (string, error) {
+func (e *EastMoneyClient) RevokeOrders(list []*model.Order) (string, error) {
 	if len(list) == 0 {
 		return "没有需要撤单的交易", nil
 	}

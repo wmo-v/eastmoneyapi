@@ -29,11 +29,11 @@ type Stockquote struct {
 	BuyPrice5      float64 `json:"f11"` // 买5价
 	BuyPrice5Count int     `json:"f12"`
 
-	NewestPrice float64 `json:"f43"` // 当前最新价
-	OpenPrice   float64 `json:"f46"` // 开盘价
-	HigestPrice float64 `json:"f44"` // 最高价
-	LowestPrice float64 `json:"f45"` // 最低价
-	AvgPrice    float64 `json:"f71"` // 均价
+	NewestPrice  float64 `json:"f43"` // 当前最新价
+	OpenPrice    float64 `json:"f46"` // 开盘价
+	HighestPrice float64 `json:"f44"` // 最高价
+	LowestPrice  float64 `json:"f45"` // 最低价
+	AvgPrice     float64 `json:"f71"` // 均价
 
 	PreClosePrice float64 `json:"f60"` // 上一交易日的收盘价
 }
@@ -43,7 +43,7 @@ func (s *Stockquote) GetActualPrice(magnification float64) {
 	s.SalePrice1 = decimal.NewFromFloat(s.SalePrice1).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
 	s.NewestPrice = decimal.NewFromFloat(s.NewestPrice).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
 	s.OpenPrice = decimal.NewFromFloat(s.OpenPrice).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
-	s.HigestPrice = decimal.NewFromFloat(s.HigestPrice).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
+	s.HighestPrice = decimal.NewFromFloat(s.HighestPrice).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
 	s.LowestPrice = decimal.NewFromFloat(s.LowestPrice).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
 	s.PreClosePrice = decimal.NewFromFloat(s.PreClosePrice).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
 	s.AvgPrice = decimal.NewFromFloat(s.AvgPrice).Div(decimal.NewFromFloat(magnification)).InexactFloat64()

@@ -6,7 +6,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-type quoteQueue struct {
+type QuoteQueue struct {
 	arr    []*Stockquote
 	front  int
 	rear   int
@@ -17,15 +17,15 @@ type quoteQueue struct {
 	lowestPrice  decimal.Decimal
 }
 
-func NewQueue(len int) *quoteQueue {
-	return &quoteQueue{
+func NewQueue(len int) *QuoteQueue {
+	return &QuoteQueue{
 		arr:    make([]*Stockquote, len+1),
 		maxLen: len + 1,
 	}
 }
 
 // Enqueue 添加新元素
-func (q *quoteQueue) Enqueue(data *Stockquote) {
+func (q *QuoteQueue) Enqueue(data *Stockquote) {
 	if q.isFull() {
 		q.dequeue()
 	}
@@ -42,27 +42,27 @@ func (q *quoteQueue) Enqueue(data *Stockquote) {
 }
 
 // GetHighestPrice 获取当前队列的最大值
-func (q *quoteQueue) GetHighestPrice() decimal.Decimal {
+func (q *QuoteQueue) GetHighestPrice() decimal.Decimal {
 	return q.highestPrice
 }
 
 // GetLowestPrice 获取当前队列的最小值
-func (q *quoteQueue) GetLowestPrice() decimal.Decimal {
+func (q *QuoteQueue) GetLowestPrice() decimal.Decimal {
 	return q.lowestPrice
 }
-func (q *quoteQueue) GrtAvgPrice() decimal.Decimal {
+func (q *QuoteQueue) GrtAvgPrice() decimal.Decimal {
 	count := (q.rear - q.front + q.maxLen) % q.maxLen
 	return q.totalPrice.Div(decimal.NewFromInt(int64(count)))
 }
-func (q *quoteQueue) isFull() bool {
+func (q *QuoteQueue) isFull() bool {
 	return (q.rear+1)%q.maxLen == q.front
 }
 
-func (q *quoteQueue) isEmpty() bool {
+func (q *QuoteQueue) isEmpty() bool {
 	return q.front == q.rear
 }
 
-func (q *quoteQueue) dequeue() {
+func (q *QuoteQueue) dequeue() {
 	value := decimal.NewFromFloat(q.arr[q.front].NewestPrice)
 	q.front = (q.front + 1) % q.maxLen
 	q.totalPrice = q.totalPrice.Sub(value)
@@ -73,7 +73,7 @@ func (q *quoteQueue) dequeue() {
 		q.reSelectMinAndMax()
 	}
 }
-func (q *quoteQueue) reSelectMinAndMax() {
+func (q *QuoteQueue) reSelectMinAndMax() {
 	var max = decimal.NewFromFloat(q.arr[q.front].NewestPrice)
 	var min = decimal.NewFromFloat(q.arr[q.front].NewestPrice)
 	var idx = q.front
@@ -91,7 +91,7 @@ func (q *quoteQueue) reSelectMinAndMax() {
 	q.lowestPrice = min
 }
 
-func (q *quoteQueue) List() {
+func (q *QuoteQueue) List() {
 	var idx = q.front
 	for idx != q.rear {
 		log.Println(q.arr[idx])

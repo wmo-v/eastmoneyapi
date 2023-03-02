@@ -4,8 +4,7 @@
 其主要的重点在于东财的登录过程，可以使用任何的语言实现。剩余的其他API，仅满足本人的交易需求。
 # 要求
 1.python环境，安装[ddddocr](https://pypi.org/project/ddddocr/)库，用于验证码识别。  
-2.安装东方财富安全控件（网页版登录的时候，必须要安装的。）  
-3.在根目录下创建config.yaml文件  
+2.在根目录下创建config.yaml文件  
 ```
 user:  
   account: "资金账号"

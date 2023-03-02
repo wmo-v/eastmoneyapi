@@ -88,7 +88,6 @@ func (e *EastMoneyClient) login(userId string, pwd string) error {
 			return errors.New("验证码识别出错")
 		}
 
-		secInfo, err := e.getSecurityInfo(verifyCode)
 		if err != nil {
 			return errors.New("验证码安全加密识别失败: " + err.Error())
 		}
@@ -97,7 +96,7 @@ func (e *EastMoneyClient) login(userId string, pwd string) error {
 			password:     pwd,
 			verifyCode:   verifyCode,
 			randNumber:   randNumber.String(),
-			securityInfo: secInfo,
+			securityInfo: "",
 		})
 	}
 	return util.Retry(5, loginFn)
@@ -355,7 +354,6 @@ func createRequestWithBaseHeader(method string, url string, body io.Reader) (*ht
 	}
 	request.Header.Add("sec-ch-ua-platform", "Windows")
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	request.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36")
 	return request, nil
 }
 

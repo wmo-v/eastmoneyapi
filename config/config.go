@@ -13,6 +13,7 @@ type Config struct {
 	Mysql MysqlConfig
 }
 type UserConfig struct {
+	UserName string
 	Account  string
 	Password string
 }

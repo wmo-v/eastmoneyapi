@@ -39,8 +39,17 @@ type Stockquote struct {
 }
 
 func (s *Stockquote) GetActualPrice(magnification float64) {
-	s.BuyPrice1 = decimal.NewFromFloat(s.BuyPrice1).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
+	s.SalePrice5 = decimal.NewFromFloat(s.SalePrice5).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
+	s.SalePrice4 = decimal.NewFromFloat(s.SalePrice4).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
+	s.SalePrice3 = decimal.NewFromFloat(s.SalePrice3).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
+	s.SalePrice2 = decimal.NewFromFloat(s.SalePrice2).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
 	s.SalePrice1 = decimal.NewFromFloat(s.SalePrice1).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
+	s.BuyPrice1 = decimal.NewFromFloat(s.BuyPrice1).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
+	s.BuyPrice2 = decimal.NewFromFloat(s.BuyPrice2).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
+	s.BuyPrice3 = decimal.NewFromFloat(s.BuyPrice3).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
+	s.BuyPrice4 = decimal.NewFromFloat(s.BuyPrice4).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
+	s.BuyPrice5 = decimal.NewFromFloat(s.BuyPrice5).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
+
 	s.NewestPrice = decimal.NewFromFloat(s.NewestPrice).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
 	s.OpenPrice = decimal.NewFromFloat(s.OpenPrice).Div(decimal.NewFromFloat(magnification)).InexactFloat64()
 	s.HighestPrice = decimal.NewFromFloat(s.HighestPrice).Div(decimal.NewFromFloat(magnification)).InexactFloat64()

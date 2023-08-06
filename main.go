@@ -33,13 +33,14 @@ func init() {
 }
 
 // 每周1-5 9.32
-var openTimeSpec = "32 9 * * 1-5"
+var openTimeSpec = "31 9 * * 1-5"
 
 // 每周1-5 15.00
 var closeTimeSpec = "0 15 * * 1-5"
 
 func main() {
 	c := cron.New()
+	log.Println(config.GetConfg().User)
 	c.AddFunc(openTimeSpec, func() {
 		z := service.NewZ513050Svc()
 		z.Start()

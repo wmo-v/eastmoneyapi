@@ -56,6 +56,7 @@ func NewEastMoneyClient() *EastMoneyClient {
 			// 第一次登录失败，说明账号密码可能是错误的，直接panic
 			panic("账号登录失败," + err.Error())
 		}
+		logrus.Info("登录成功")
 		go func() {
 			for {
 				time.Sleep(time.Minute * 10)
@@ -99,7 +100,7 @@ func (e *EastMoneyClient) login(userId string, pwd string) error {
 			securityInfo: "",
 		})
 	}
-	return util.Retry(5, loginFn)
+	return util.Retry(10, loginFn)
 
 }
 

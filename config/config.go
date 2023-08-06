@@ -13,9 +13,10 @@ type Config struct {
 	Mysql MysqlConfig
 }
 type UserConfig struct {
-	UserName string
-	Account  string
-	Password string
+	MaxAmount int
+	UserName  string
+	Account   string
+	Password  string
 }
 type MysqlConfig struct {
 	Host   string
